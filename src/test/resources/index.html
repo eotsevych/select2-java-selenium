@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Select2 Unit Page</title>
+    <style>
+        .click-me-button {
+            position: relative;
+            z-index: 1;
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+    <script type="application/javascript">
+        $(document).ready(function () {
+            $('.single-select').select2({
+                width: 'inherit',
+                placeholder: "Select an option",
+                allowClear: true
+            });
+
+            $('.failed-to-open-select').select2({
+                width: 'inherit',
+                placeholder: "Select an option",
+                allowClear: true
+            });
+
+            $('.single-select-hide-search').select2({
+                minimumResultsForSearch: Infinity,
+                width: 'inherit',
+                placeholder: "Select an option",
+                allowClear: true
+            });
+            $('.single-select-predefined').select2({
+                placeholder: "Select an option",
+                width: 'inherit',
+                allowClear: true
+            });
+            $('.single-select-disabled-option').select2({
+                width: 'inherit',
+                placeholder: "Select an option",
+                allowClear: true
+            });
+            $('.multiple-select').select2({
+                placeholder: "Select a State",
+                width: 'inherit',
+                multiple: true
+            });
+            $('.multiple-select-predefined').select2({
+                placeholder: "Select a State",
+                width: 'inherit',
+                multiple: true
+            });
+            $('.multiple-select-remain-open').select2({
+                placeholder: "Select a State",
+                width: 'inherit',
+                closeOnSelect: false
+            });
+            $('.multiple-select-predefined').val(['CA', 'NV', 'OR', 'WA']);
+            $('.multiple-select-predefined').trigger('change');
+
+            let failedToOpen = $('.failed-to-open-select')
+            failedToOpen.on('select2:opening', function (e){
+                e.preventDefault();
+                console.log('Action canceled!');
+            });
+
+            let singleSelectCovered = $('.single-select-covered');
+            let clickMeButton = $('#clickMeButton');
+
+            singleSelectCovered.select2({
+                width: 'inherit',
+                placeholder: "Select an option",
+                allowClear: true,
+            });
+
+            // Hide the Select2 dropdown by default
+            singleSelectCovered.siblings('.select2').hide();
+
+            clickMeButton.on('click', function () {
+                // Show the Select2 dropdown
+                singleSelectCovered.siblings('.select2').show();
+                singleSelectCovered.select2('open');
+            });
+
+            singleSelectCovered.on('select2:select', function (e) {
+                let selectedOption = singleSelectCovered.select2('data')[0].text;
+                clickMeButton.text(selectedOption);
+
+                // Hide the Select2 dropdown after selecting an option
+                singleSelectCovered.siblings('.select2').hide();
+            });
+
+            // Add a click event listener to the document to hide the Select2 dropdown when clicking outside
+            $(document).on('click', function (e) {
+                if (!$(e.target).closest('.select-container').length) {
+                    singleSelectCovered.siblings('.select2').hide();
+                }
+            });
+
+            $(".itemSearch").select2({
+                width: '100%',
+                tags: true,
+                multiple: true,
+                tokenSeparators: [',', ' '],
+                minimumInputLength: 2,
+                minimumResultsForSearch: 10,
+                quietMillis: 1500,
+                ajax: {
+                    url: 'https://api.github.com/search/repositories',
+                    dataType: "json",
+                    type: "GET",
+                    data: function (params) {
+                        return {
+                            q: params.term,
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data.items, function (item) {
+                                return {
+                                    text: item.name,
+                                    id: item.id
+                                }
+                            })
+                        };
+                    }
+                }
+            });
+
+
+            $(".js-data-example-ajax").select2({
+                width: '100%',
+                ajax: {
+                    url: 'https://api.github.com/orgs/select2/repos',
+                    data: function (params) {
+                        var query = {
+                            search: params.term,
+                            type: 'public'
+                        }
+                        return query;
+                    },
+                    processResults: function (data) {
+                        console.log(data)
+                        // Transforms the top-level key of the response object from 'items' to 'results'
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+<div class="container">
+    <h1 class="title">Select2 Element Examples</h1>
+    <div class="selects">
+        <div class="s2-border select-item">
+            <p class="select-name">Single Select Test</p>
+            <select class="single-select form-control">
+                <option></option>
+                <option value="AK" data-select2-id="7">Alaska</option>
+                <option value="HI" data-select2-id="2">Hawaii</option>
+                <option value="CA" data-select2-id="3">California</option>
+                <option value="NV" data-select2-id="4">Nevada</option>
+                <option value="OR" data-select2-id="5">Oregon</option>
+                <option value="WA" data-select2-id="6">Washington</option>
+            </select>
+        </div>
+        <div class="s2-border select-item">
+            <p class="select-name">Single Select Without Search</p>
+            <select class="single-select-hide-search form-control">
+                <option></option>
+                <option value="AK" data-select2-id="7">Alaska</option>
+                <option value="HI" data-select2-id="2">Hawaii</option>
+                <option value="CA" data-select2-id="3">California</option>
+                <option value="NV" data-select2-id="4">Nevada</option>
+                <option value="OR" data-select2-id="5">Oregon</option>
+                <option value="WA" data-select2-id="6">Washington</option>
+            </select>
+        </div>
+        <div class="s2-border select-item">
+            <p class="select-name">Single Select Predefined Option</p>
+            <select class="single-select-predefined form-control">
+                <option></option>
+                <option value="AK" data-select2-id="7">Alaska</option>
+                <option value="HI" data-select2-id="8" selected>Hawaii</option>
+                <option value="CA" data-select2-id="9">California</option>
+                <option value="NV" data-select2-id="10">Nevada</option>
+                <option value="OR" data-select2-id="11">Oregon</option>
+                <option value="WA" data-select2-id="12">Washington</option>
+            </select>
+        </div>
+        <div class="s2-border select-item">
+            <p class="select-name">Single Select With Disabled Option</p>
+            <select class="single-select-disabled-option form-control">
+                <option></option>
+                <option value="AK" data-select2-id="13">Alaska</option>
+                <option value="HI" data-select2-id="14" disabled="disabled">Hawaii</option>
+                <option value="CA" data-select2-id="15">California</option>
+                <option value="NV" data-select2-id="16">Nevada</option>
+                <option value="OR" data-select2-id="17">Oregon</option>
+                <option value="WA" data-select2-id="18">Washington</option>
+            </select>
+        </div>
+        <div class="s2-border select-item">
+            <p class="select-name test">Multiple Select</p>
+            <select class="multiple-select form-control" multiple="multiple">
+                <option value="AK" data-select2-id="19">Alaska</option>
+                <option value="HI" data-select2-id="20">Hawaii</option>
+                <option value="CA" data-select2-id="21">California</option>
+                <option value="NV" data-select2-id="22">Nevada</option>
+                <option value="OR" data-select2-id="23">Oregon</option>
+                <option value="WA" data-select2-id="24">Washington</option>
+            </select>
+        </div>
+        <div class="s2-border select-item">
+            <p class="select-name">Multiple Select Predefined Option</p>
+            <select class="multiple-select-predefined form-control" multiple="multiple">
+                <option value="AK" data-select2-id="25">Alaska</option>
+                <option value="HI" data-select2-id="26">Hawaii</option>
+                <option value="CA" data-select2-id="27">California</option>
+                <option value="NV" data-select2-id="28">Nevada</option>
+                <option value="OR" data-select2-id="29">Oregon</option>
+                <option value="WA" data-select2-id="30">Washington</option>
+            </select>
+        </div>
+        <div class="s2-border select-item">
+            <p class="select-name">Multiple Select Remain Open</p>
+            <select class="multiple-select-remain-open form-control" multiple="multiple">
+                <option value="AK" data-select2-id="31">Alaska</option>
+                <option value="HI" data-select2-id="32">Hawaii</option>
+                <option value="CA" data-select2-id="33">California</option>
+                <option value="NV" data-select2-id="34">Nevada</option>
+                <option value="OR" data-select2-id="35">Oregon</option>
+                <option value="WA" data-select2-id="36">Washington</option>
+            </select>
+        </div>
+        <div class="s2-border select-item">
+            <p class="select-name">Covered Select Test</p>
+            <div class="select-container">
+                <select class="single-select-covered form-control select2-hidden-accessible" tabindex="-1"
+                        aria-hidden="true">
+                    <option></option>
+                    <option value="AK">Alaska</option>
+                    <option value="HI">Hawaii</option>
+                    <option value="CA">California</option>
+                    <option value="NV">Nevada</option>
+                    <option value="OR">Oregon</option>
+                    <option value="WA">Washington</option>
+                </select>
+                <button id="clickMeButton" class="click-me-button">Click Me</button>
+            </div>
+        </div>
+        <div class="s2-border select-item">
+            <p class="select-name">Loading Test</p>
+            <div class="select-container">
+                <select class="itemSearch"></select>
+            </div>
+        </div>
+        <div class="s2-border select-item">
+            <p class="select-name">Failed to Open Select Test</p>
+            <select class="failed-to-open-select form-control">
+                <option></option>
+                <option value="HI" data-select2-id="2">Hawaii</option>
+                <option value="CA" data-select2-id="3">California</option>
+                <option value="NV" data-select2-id="4">Nevada</option>
+                <option value="OR" data-select2-id="5">Oregon</option>
+                <option value="WA" data-select2-id="6">Washington</option>
+            </select>
+        </div>
+    </div>
+
+</div>
+</body>
+
+</html>

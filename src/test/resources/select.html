@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <meta charset="UTF-8">
+  <title>Select2 Unit Page</title>
+  <style>
+    .select-container {
+      position: relative;
+      width: 200px;
+    }
+
+    .click-me-button {
+      position: relative;
+      z-index: 1;
+      background-color: #3498db;
+      color: #fff;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+  </style>
+  <script type="application/javascript">
+    $(document).ready(function () {
+      let singleSelectCovered = $('.single-select-covered');
+      let clickMeButton = $('#clickMeButton');
+
+      singleSelectCovered.select2({
+        width: 'inherit',
+        placeholder: "Select an option",
+        allowClear: true,
+      });
+
+      // Hide the Select2 dropdown by default
+      singleSelectCovered.siblings('.select2').hide();
+
+      clickMeButton.on('click', function() {
+        // Show the Select2 dropdown
+        singleSelectCovered.siblings('.select2').show();
+        singleSelectCovered.select2('open');
+      });
+
+      singleSelectCovered.on('select2:select', function (e) {
+        let selectedOption = singleSelectCovered.select2('data')[0].text;
+        clickMeButton.text(selectedOption);
+
+        // Hide the Select2 dropdown after selecting an option
+        singleSelectCovered.siblings('.select2').hide();
+      });
+
+      // Add a click event listener to the document to hide the Select2 dropdown when clicking outside
+      $(document).on('click', function(e) {
+        if (!$(e.target).closest('.select-container').length) {
+          singleSelectCovered.siblings('.select2').hide();
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+<div class="container">
+  <h1 class="title">Select2 Element Examples</h1>
+  <div class="selects">
+    <div class="s2-border select-item">
+      <p class="select-name">Single Select Test</p>
+      <div class="select-container">
+        <select class="single-select-covered form-control select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+          <option></option>
+          <option value="HI">Hawaii</option>
+          <option value="CA">California</option>
+          <option value="NV">Nevada</option>
+          <option value="OR">Oregon</option>
+          <option value="WA">Washington</option>
+        </select>
+        <button id="clickMeButton" class="click-me-button">Click Me</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

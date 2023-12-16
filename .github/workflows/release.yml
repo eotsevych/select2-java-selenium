@@ -20,9 +20,9 @@ jobs:
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
           cache: false
-      - name: maven version
+      - name: Maven version
         run: mvn -version
-      - name: java version
+      - name: Java version
         run: java -version
       - name: Deploy
         run: mvn deploy --batch-mode -DskipTests --no-transfer-progress
@@ -37,9 +37,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: maven version
+      - name: Maven version
         run: mvn -version
-      - name: java version
+      - name: Java version
         run: java -version
       - name: Build
         run: mvn clean package -DskipTests

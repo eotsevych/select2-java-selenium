@@ -39,6 +39,7 @@ jobs:
         with:
           path: target/select2-java-selenium-1.0.jar
           name: ${{ steps.set-artifactId.outputs.artifactId }}-${{ env.version }}.jar
+          distribution: jar
           repository: maven
           url: https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/
           credentials: ${{ secrets.OSSRH_PAT }}

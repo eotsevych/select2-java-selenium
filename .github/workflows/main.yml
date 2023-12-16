@@ -17,5 +17,5 @@ jobs:
         uses: Xotabu4/selenoid-github-action@v2
       - uses: actions/checkout@v1
 
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml test
+      - name: Test
+        run: mvn test

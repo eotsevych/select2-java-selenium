@@ -33,7 +33,7 @@ jobs:
         run: mvn deploy --batch-mode -DskipTests --no-transfer-progress
         env:
           GPG_TTY: /dev/tty
-          GPG_KEY_NAME: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }} #
+          GPG_KEY_NAME: ${{ secrets.GPG_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_PAT }}

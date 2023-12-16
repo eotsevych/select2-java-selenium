@@ -30,11 +30,15 @@ jobs:
           gpg --import ~/.ssh/id_rsa.pub
           mvn gpg:sign-artifacts
 
+      - name: Set artifactId
+        id: set-artifactId
+        run: echo "::set-output name=artifactId::select2-java-selenium"
+
       - name: Publish to Maven Central
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ artifactId }}-${{ version }}.jar
-          path: target/${{ artifactId }}-${{ version }}.jar
+          path: target/select2-java-selenium-1.0.jar
+          name: ${{ steps.set-artifactId.outputs.artifactId }}-${{ env.version }}.jar
           repository: maven
           url: https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/
           credentials: ${{ secrets.OSSRH_PAT }}
@@ -42,8 +46,8 @@ jobs:
       - name: Publish to GitHub Packages
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ artifactId }}-${{ version }}.jar
-          path: target/${{ artifactId }}-${{ version }}.jar
+          path: target/select2-java-selenium-1.0.jar
+          name: ${{ steps.set-artifactId.outputs.artifactId }}-${{ env.version }}.jar
           repository: github
           owner: eotsevych
           repo: select2-java-selenium

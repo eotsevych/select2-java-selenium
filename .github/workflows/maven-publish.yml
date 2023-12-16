@@ -10,12 +10,10 @@ on:
 
 jobs:
   publish:
-    name: Publish to Maven
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Set up Java
+      - uses: actions/checkout@v4
+      - name: Set up Maven Central Repository
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
@@ -25,5 +23,5 @@ jobs:
           server-password: ${{ secrets.OSSRH_PASSWORD }}
           gpg-private-key: ${{ secrets.GPG_KEY }}
           gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
-      - name: Deploy
-        run: mvn deploy --batch-mode -DskipTests --no-transfer-progress
+            - name: Deploy
+              run: mvn deploy --batch-mode -DskipTests --no-transfer-progress

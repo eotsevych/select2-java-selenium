@@ -7,7 +7,6 @@ import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.UnexpectedTagNameException;
@@ -25,7 +24,7 @@ import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestMethodOrder(MethodOrderer.Random.class)
+@TestMethodOrder(MethodOrderer.DisplayName.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Select2Test {
     private final List<String> optionTextList = Arrays.asList("Alaska", "Hawaii", "California", "Nevada", "Oregon", "Washington");

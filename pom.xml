@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.eotsevych</groupId>
     <artifactId>select2-java-selenium</artifactId>
-    <version>1.0</version>
+    <version>1.1.4</version>
 
     <name>select2 Java Selenium</name>
     <description>Streamlining Select2 integration for efficient Selenium-based UI automation</description>

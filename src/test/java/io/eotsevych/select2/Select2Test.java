@@ -1,12 +1,22 @@
 package io.eotsevych.select2;
 
-import org.junit.jupiter.api.*;
+import io.eotsevych.select2.exceptions.Select2DropdownNotOpenedException;
+import io.eotsevych.select2.exceptions.Select2NoOptionPresentException;
+import io.eotsevych.select2.exceptions.UnexpectedSelect2StructureException;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.UnexpectedTagNameException;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
@@ -19,15 +29,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestMethodOrder(MethodOrderer.DisplayName.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Select2Test {
+    private final List<String> optionTextList = Arrays.asList("Alaska", "Hawaii", "California", "Nevada", "Oregon", "Washington");
     private WebDriver driver;
     private WebDriverWait webDriverWait;
-
-    private final List<String> optionTextList = Arrays.asList("Alaska", "Hawaii", "California", "Nevada", "Oregon", "Washington");
 
     @BeforeAll
     void setup() throws MalformedURLException {
@@ -35,11 +47,12 @@ public class Select2Test {
         chromeOptions.addArguments("--disable-gpu", "--window-size=1920,1200", "--ignore-certificate-errors", "--disable-extensions", "--no-sandbox", "--disable-dev-shm-usage");
 
         driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), chromeOptions);
+        //driver = new ChromeDriver(chromeOptions);
+        webDriverWait = new WebDriverWait(driver, Duration.of(10, ChronoUnit.SECONDS), Duration.of(500, ChronoUnit.MILLIS));
     }
 
     @BeforeEach
     void refresh() {
-        webDriverWait = new WebDriverWait(driver, Duration.of(10, ChronoUnit.SECONDS), Duration.of(500, ChronoUnit.MILLIS));
         driver.get("file://" + new File("src/test/resources/index.html").getAbsolutePath());
     }
 
@@ -273,6 +286,19 @@ public class Select2Test {
 
         List<String> chosen = Select2Element.getMultiSelectedOptionsText();
         assertEquals(searchQueryList, chosen);
+    }
+
+    @Test
+    void unexpectedSelect2StructureExceptionText() {
+        driver.get("https://select2.github.io/select2/");
+
+        assertThrows(UnexpectedSelect2StructureException.class, () -> new Select2(driver.findElement(By.cssSelector("#e9"))));
+    }
+
+    @Test
+    @Disabled
+    void unexpectedTagNameExceptionTest() {
+        assertThrows(UnexpectedTagNameException.class, () -> new Select2(driver.findElement(By.cssSelector("#clickMeButton"))));
     }
 
     @AfterAll

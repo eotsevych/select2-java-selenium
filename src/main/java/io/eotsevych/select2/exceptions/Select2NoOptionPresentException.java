@@ -1,6 +1,4 @@
-package io.eotsevych.select2;
-
-import org.openqa.selenium.WebElement;
+package io.eotsevych.select2.exceptions;
 
 import java.util.List;
 

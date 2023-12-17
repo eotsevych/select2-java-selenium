@@ -1,9 +1,17 @@
 package io.eotsevych.select2;
 
-import org.openqa.selenium.*;
+import io.eotsevych.select2.exceptions.Select2DropdownNotOpenedException;
+import io.eotsevych.select2.exceptions.Select2NoOptionPresentException;
+import io.eotsevych.select2.exceptions.UnexpectedSelect2StructureException;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.UnexpectedTagNameException;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -15,24 +23,35 @@ public class Select2 implements ISelect2 {
     public static final String SELECT_2_RESULTS_LI = ".select2-results li";
     public static final String SELECT_2_DROPDOWN_LOCATOR = "//span[contains(@class, 'select2-dropdown')]";
     public static final By SELECT_2_SEARCH_FIELD_LOCATOR = By.cssSelector("input.select2-search__field");
-    private final WebElement selectElement;
-    private final WebElement containerElement;
-    private WebElement select2DropDownElement = null;
-    private final WebDriver driver;
     private final WebDriverWait webDriverWait;
+    private WebElement selectElement;
+    private WebElement containerElement;
+    private WebElement select2DropDownElement = null;
+    private WebDriver driver;
 
     public Select2(WebElement selectElement, WebDriverWait webDriverWait) {
-        this.selectElement = selectElement;
-        this.containerElement = selectElement.findElement(By.xpath("./../span")); //./../span
-        driver = ((RemoteWebElement) selectElement).getWrappedDriver();
+        init(selectElement);
         this.webDriverWait = webDriverWait;
     }
 
     public Select2(WebElement selectElement) {
-        this.selectElement = selectElement;
-        this.containerElement = selectElement.findElement(By.xpath("./../span"));
-        driver = ((RemoteWebElement) selectElement).getWrappedDriver();
+        init(selectElement);
         this.webDriverWait = new WebDriverWait(driver, Duration.of(10, ChronoUnit.SECONDS));
+    }
+
+    private void init(WebElement selectElement) {
+        String tagName = selectElement.getTagName();
+        if ("select".equalsIgnoreCase(tagName)) {
+            this.selectElement = selectElement;
+        } else {
+            throw new UnexpectedTagNameException("select", tagName);
+        }
+        try {
+            this.containerElement = selectElement.findElement(By.xpath("./../span")); //./../span
+        } catch (NoSuchElementException ex) {
+            throw new UnexpectedSelect2StructureException(selectElement);
+        }
+        driver = ((RemoteWebElement) selectElement).getWrappedDriver();
     }
 
     @Override
@@ -160,7 +179,8 @@ public class Select2 implements ISelect2 {
         for (String text : textList) {
             containerElement.findElements(By.xpath(".//li[@class='select2-selection__choice']"))
                     .stream().filter(el -> el.getAttribute("title").equalsIgnoreCase(text))
-                    .findFirst().get()
+                    .findFirst()
+                    .orElseThrow(() -> new Select2NoOptionPresentException(text, getOptions().stream().map(WebElement::getText).toList()))
                     .findElement(By.cssSelector("span")).click();
         }
     }

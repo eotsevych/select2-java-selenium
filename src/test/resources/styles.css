@@ -1,55 +1,56 @@
 html {
-  box-sizing: border-box;
-  height: 100%;
+    box-sizing: border-box;
+    height: 100%;
 }
 
 *,
 *::after,
 *::before {
-  box-sizing: inherit;
+    box-sizing: inherit;
 }
- p{
-   margin: 0;
- }
+
+p {
+    margin: 0;
+}
 
 .container {
-  max-width: 1330px;
-  margin: 0 auto;
-  padding: 0 15px;
+    max-width: 1330px;
+    margin: 0 auto;
+    padding: 0 15px;
 }
 
 .title {
-  margin-top: 30px;
-  margin-bottom: 30px;
-  text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    text-align: center;
 }
 
 .selects {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 180px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 180px 60px;
 }
 
 .select-name {
-  font-size: 18px;
-  margin-bottom: 10px;
+    font-size: 18px;
+    margin-bottom: 10px;
 }
 
 .select-item {
-  width: 100%;
-  padding: 10px;
-  border: 2px solid #eee;
-  border-radius: 5px;
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #eee;
+    border-radius: 5px;
 }
 
 @media screen and (max-width: 1080px) {
-  .selects {
-    grid-template-columns: 1fr 1fr;
-  }
+    .selects {
+        grid-template-columns: 1fr 1fr;
+    }
 }
 
 @media screen and (max-width: 800px) {
-  .selects {
-    grid-template-columns: 1fr;
-  }
+    .selects {
+        grid-template-columns: 1fr;
+    }
 }

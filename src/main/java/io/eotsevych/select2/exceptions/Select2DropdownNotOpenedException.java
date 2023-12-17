@@ -1,7 +1,6 @@
-package io.eotsevych.select2;
+package io.eotsevych.select2.exceptions;
 
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.RemoteWebElement;
 
 public class Select2DropdownNotOpenedException extends RuntimeException {
     private static final String DEFAULT_MESSAGE = "An exception occurred: Select2 element not opened \n%s.";

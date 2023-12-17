@@ -2,9 +2,9 @@
 <html lang="en">
 
 <head>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="styles.css">
+    <script crossorigin="anonymous"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="styles.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <meta charset="UTF-8">
@@ -68,7 +68,7 @@
             $('.multiple-select-predefined').trigger('change');
 
             let failedToOpen = $('.failed-to-open-select')
-            failedToOpen.on('select2:opening', function (e){
+            failedToOpen.on('select2:opening', function (e) {
                 e.preventDefault();
                 console.log('Action canceled!');
             });
@@ -169,88 +169,88 @@
             <p class="select-name">Single Select Test</p>
             <select class="single-select form-control">
                 <option></option>
-                <option value="AK" data-select2-id="7">Alaska</option>
-                <option value="HI" data-select2-id="2">Hawaii</option>
-                <option value="CA" data-select2-id="3">California</option>
-                <option value="NV" data-select2-id="4">Nevada</option>
-                <option value="OR" data-select2-id="5">Oregon</option>
-                <option value="WA" data-select2-id="6">Washington</option>
+                <option data-select2-id="7" value="AK">Alaska</option>
+                <option data-select2-id="2" value="HI">Hawaii</option>
+                <option data-select2-id="3" value="CA">California</option>
+                <option data-select2-id="4" value="NV">Nevada</option>
+                <option data-select2-id="5" value="OR">Oregon</option>
+                <option data-select2-id="6" value="WA">Washington</option>
             </select>
         </div>
         <div class="s2-border select-item">
             <p class="select-name">Single Select Without Search</p>
             <select class="single-select-hide-search form-control">
                 <option></option>
-                <option value="AK" data-select2-id="7">Alaska</option>
-                <option value="HI" data-select2-id="2">Hawaii</option>
-                <option value="CA" data-select2-id="3">California</option>
-                <option value="NV" data-select2-id="4">Nevada</option>
-                <option value="OR" data-select2-id="5">Oregon</option>
-                <option value="WA" data-select2-id="6">Washington</option>
+                <option data-select2-id="7" value="AK">Alaska</option>
+                <option data-select2-id="2" value="HI">Hawaii</option>
+                <option data-select2-id="3" value="CA">California</option>
+                <option data-select2-id="4" value="NV">Nevada</option>
+                <option data-select2-id="5" value="OR">Oregon</option>
+                <option data-select2-id="6" value="WA">Washington</option>
             </select>
         </div>
         <div class="s2-border select-item">
             <p class="select-name">Single Select Predefined Option</p>
             <select class="single-select-predefined form-control">
                 <option></option>
-                <option value="AK" data-select2-id="7">Alaska</option>
-                <option value="HI" data-select2-id="8" selected>Hawaii</option>
-                <option value="CA" data-select2-id="9">California</option>
-                <option value="NV" data-select2-id="10">Nevada</option>
-                <option value="OR" data-select2-id="11">Oregon</option>
-                <option value="WA" data-select2-id="12">Washington</option>
+                <option data-select2-id="7" value="AK">Alaska</option>
+                <option data-select2-id="8" selected value="HI">Hawaii</option>
+                <option data-select2-id="9" value="CA">California</option>
+                <option data-select2-id="10" value="NV">Nevada</option>
+                <option data-select2-id="11" value="OR">Oregon</option>
+                <option data-select2-id="12" value="WA">Washington</option>
             </select>
         </div>
         <div class="s2-border select-item">
             <p class="select-name">Single Select With Disabled Option</p>
             <select class="single-select-disabled-option form-control">
                 <option></option>
-                <option value="AK" data-select2-id="13">Alaska</option>
-                <option value="HI" data-select2-id="14" disabled="disabled">Hawaii</option>
-                <option value="CA" data-select2-id="15">California</option>
-                <option value="NV" data-select2-id="16">Nevada</option>
-                <option value="OR" data-select2-id="17">Oregon</option>
-                <option value="WA" data-select2-id="18">Washington</option>
+                <option data-select2-id="13" value="AK">Alaska</option>
+                <option data-select2-id="14" disabled="disabled" value="HI">Hawaii</option>
+                <option data-select2-id="15" value="CA">California</option>
+                <option data-select2-id="16" value="NV">Nevada</option>
+                <option data-select2-id="17" value="OR">Oregon</option>
+                <option data-select2-id="18" value="WA">Washington</option>
             </select>
         </div>
         <div class="s2-border select-item">
             <p class="select-name test">Multiple Select</p>
             <select class="multiple-select form-control" multiple="multiple">
-                <option value="AK" data-select2-id="19">Alaska</option>
-                <option value="HI" data-select2-id="20">Hawaii</option>
-                <option value="CA" data-select2-id="21">California</option>
-                <option value="NV" data-select2-id="22">Nevada</option>
-                <option value="OR" data-select2-id="23">Oregon</option>
-                <option value="WA" data-select2-id="24">Washington</option>
+                <option data-select2-id="19" value="AK">Alaska</option>
+                <option data-select2-id="20" value="HI">Hawaii</option>
+                <option data-select2-id="21" value="CA">California</option>
+                <option data-select2-id="22" value="NV">Nevada</option>
+                <option data-select2-id="23" value="OR">Oregon</option>
+                <option data-select2-id="24" value="WA">Washington</option>
             </select>
         </div>
         <div class="s2-border select-item">
             <p class="select-name">Multiple Select Predefined Option</p>
             <select class="multiple-select-predefined form-control" multiple="multiple">
-                <option value="AK" data-select2-id="25">Alaska</option>
-                <option value="HI" data-select2-id="26">Hawaii</option>
-                <option value="CA" data-select2-id="27">California</option>
-                <option value="NV" data-select2-id="28">Nevada</option>
-                <option value="OR" data-select2-id="29">Oregon</option>
-                <option value="WA" data-select2-id="30">Washington</option>
+                <option data-select2-id="25" value="AK">Alaska</option>
+                <option data-select2-id="26" value="HI">Hawaii</option>
+                <option data-select2-id="27" value="CA">California</option>
+                <option data-select2-id="28" value="NV">Nevada</option>
+                <option data-select2-id="29" value="OR">Oregon</option>
+                <option data-select2-id="30" value="WA">Washington</option>
             </select>
         </div>
         <div class="s2-border select-item">
             <p class="select-name">Multiple Select Remain Open</p>
             <select class="multiple-select-remain-open form-control" multiple="multiple">
-                <option value="AK" data-select2-id="31">Alaska</option>
-                <option value="HI" data-select2-id="32">Hawaii</option>
-                <option value="CA" data-select2-id="33">California</option>
-                <option value="NV" data-select2-id="34">Nevada</option>
-                <option value="OR" data-select2-id="35">Oregon</option>
-                <option value="WA" data-select2-id="36">Washington</option>
+                <option data-select2-id="31" value="AK">Alaska</option>
+                <option data-select2-id="32" value="HI">Hawaii</option>
+                <option data-select2-id="33" value="CA">California</option>
+                <option data-select2-id="34" value="NV">Nevada</option>
+                <option data-select2-id="35" value="OR">Oregon</option>
+                <option data-select2-id="36" value="WA">Washington</option>
             </select>
         </div>
         <div class="s2-border select-item">
             <p class="select-name">Covered Select Test</p>
             <div class="select-container">
-                <select class="single-select-covered form-control select2-hidden-accessible" tabindex="-1"
-                        aria-hidden="true">
+                <select aria-hidden="true" class="single-select-covered form-control select2-hidden-accessible"
+                        tabindex="-1">
                     <option></option>
                     <option value="AK">Alaska</option>
                     <option value="HI">Hawaii</option>
@@ -259,7 +259,7 @@
                     <option value="OR">Oregon</option>
                     <option value="WA">Washington</option>
                 </select>
-                <button id="clickMeButton" class="click-me-button">Click Me</button>
+                <button class="click-me-button" id="clickMeButton">Click Me</button>
             </div>
         </div>
         <div class="s2-border select-item">
@@ -272,11 +272,11 @@
             <p class="select-name">Failed to Open Select Test</p>
             <select class="failed-to-open-select form-control">
                 <option></option>
-                <option value="HI" data-select2-id="2">Hawaii</option>
-                <option value="CA" data-select2-id="3">California</option>
-                <option value="NV" data-select2-id="4">Nevada</option>
-                <option value="OR" data-select2-id="5">Oregon</option>
-                <option value="WA" data-select2-id="6">Washington</option>
+                <option data-select2-id="2" value="HI">Hawaii</option>
+                <option data-select2-id="3" value="CA">California</option>
+                <option data-select2-id="4" value="NV">Nevada</option>
+                <option data-select2-id="5" value="OR">Oregon</option>
+                <option data-select2-id="6" value="WA">Washington</option>
             </select>
         </div>
     </div>

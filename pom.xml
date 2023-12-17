@@ -72,22 +72,27 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>8.0.0.Final</version>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.17.1</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.hibernate.validator</groupId>-->
+<!--            <artifactId>hibernate-validator</artifactId>-->
+<!--            <version>8.0.0.Final</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit5.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>5.6.0</version>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.mockito</groupId>-->
+<!--            <artifactId>mockito-core</artifactId>-->
+<!--            <version>5.6.0</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -99,6 +104,7 @@
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version>${selenium.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -161,15 +167,12 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.10</version>
+                <configuration>
+                    <formats>
+                        <format>XML</format>
+                    </formats>
+                </configuration>
                 <executions>
-                    <!--first execution : for preparing JaCoCo runtime agent-->
-                    <execution>
-                        <id>prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <!--second execution : for creating code coverage reports-->
                     <execution>
                         <id>report</id>
                         <phase>test</phase>

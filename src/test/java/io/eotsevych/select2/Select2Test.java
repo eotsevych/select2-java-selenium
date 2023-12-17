@@ -1,17 +1,19 @@
 package io.eotsevych.select2;
 
+import io.eotsevych.select2.exceptions.Select2DropdownNotOpenedException;
+import io.eotsevych.select2.exceptions.Select2NoOptionPresentException;
+import io.eotsevych.select2.exceptions.UnexpectedSelect2StructureException;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.UnexpectedTagNameException;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
@@ -21,25 +23,25 @@ import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestMethodOrder(MethodOrderer.Random.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Select2Test {
+    private final List<String> optionTextList = Arrays.asList("Alaska", "Hawaii", "California", "Nevada", "Oregon", "Washington");
     private WebDriver driver;
     private WebDriverWait webDriverWait;
-
-    private final List<String> optionTextList = Arrays.asList("Alaska", "Hawaii", "California", "Nevada", "Oregon", "Washington");
 
     @BeforeAll
     void setup() throws MalformedURLException {
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--disable-gpu", "--window-size=1920,1200", "--ignore-certificate-errors", "--disable-extensions", "--no-sandbox", "--disable-dev-shm-usage");
 
-        driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), chromeOptions);
+        //driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), chromeOptions);
+        driver = new ChromeDriver(chromeOptions);
+        webDriverWait = new WebDriverWait(driver, Duration.of(10, ChronoUnit.SECONDS), Duration.of(500, ChronoUnit.MILLIS));
     }
 
     @BeforeEach
     void refresh() {
-        webDriverWait = new WebDriverWait(driver, Duration.of(10, ChronoUnit.SECONDS), Duration.of(500, ChronoUnit.MILLIS));
         driver.get("file://" + new File("src/test/resources/index.html").getAbsolutePath());
     }
 
@@ -273,6 +275,18 @@ public class Select2Test {
 
         List<String> chosen = Select2Element.getMultiSelectedOptionsText();
         assertEquals(searchQueryList, chosen);
+    }
+
+    @Test
+    void unexpectedSelect2StructureExceptionText() {
+        driver.get("https://select2.github.io/select2/");
+
+        assertThrows(UnexpectedSelect2StructureException.class, () -> new Select2(driver.findElement(By.cssSelector("#e9"))));
+    }
+
+    @Test
+    void UnexpectedTagNameExceptionTest() {
+        assertThrows(UnexpectedTagNameException.class, () -> new Select2(driver.findElement(By.cssSelector("#clickMeButton"))));
     }
 
     @AfterAll

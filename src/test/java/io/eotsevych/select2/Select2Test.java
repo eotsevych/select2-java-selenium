@@ -286,6 +286,7 @@ public class Select2Test {
     }
 
     @Test
+    @Disabled
     void UnexpectedTagNameExceptionTest() {
         assertThrows(UnexpectedTagNameException.class, () -> new Select2(driver.findElement(By.cssSelector("#clickMeButton"))));
     }

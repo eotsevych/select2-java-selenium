@@ -9,11 +9,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.UnexpectedTagNameException;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
@@ -35,8 +37,8 @@ public class Select2Test {
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--disable-gpu", "--window-size=1920,1200", "--ignore-certificate-errors", "--disable-extensions", "--no-sandbox", "--disable-dev-shm-usage");
 
-        //driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), chromeOptions);
-        driver = new ChromeDriver(chromeOptions);
+        driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), chromeOptions);
+        //driver = new ChromeDriver(chromeOptions);
         webDriverWait = new WebDriverWait(driver, Duration.of(10, ChronoUnit.SECONDS), Duration.of(500, ChronoUnit.MILLIS));
     }
 

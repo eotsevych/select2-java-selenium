@@ -1,5 +1,7 @@
 # select2-java-selenium
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/4c416ebdae38435f976e1fdbd18dfcc3)](https://app.codacy.com/gh/eotsevych/select2-java-selenium?utm_source=github.com&utm_medium=referral&utm_content=eotsevych/select2-java-selenium&utm_campaign=Badge_Grade)
+
 ## Overview
 
 The `Select2` class in the `select2-java-selenium` library provides a powerful implementation of the `ISelect2` interface for seamless integration of Select2 functionality with Selenium. This class enables efficient UI automation by offering methods to select options, verify option states, remove selections, and retrieve selected option text.

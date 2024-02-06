@@ -2,6 +2,10 @@ package io.eotsevych.select2;
 
 import java.util.List;
 
+/**
+ * Interface representing a component that interacts with Select2 UI elements.
+ * Implementations of this interface provide methods for working with Select2 dropdowns.
+ */
 public interface ISelect2 {
 
     /**
@@ -59,6 +63,7 @@ public interface ISelect2 {
      *
      * @param isOpened - Parameter indicating whether the dropdown is already open
      * @param text     - value text
+     * @return {@code true} if the option is disabled, {@code false} otherwise.
      */
     boolean isOptionDisabledByText(String text, boolean... isOpened);
 
@@ -67,6 +72,7 @@ public interface ISelect2 {
      *
      * @param isOpened - Parameter indicating whether the dropdown is already open
      * @param text     - value text
+     * @return {@code true} if the option is disabled, {@code false} otherwise.
      */
     boolean isOptionPresentByText(String text, boolean... isOpened);
 
@@ -74,6 +80,13 @@ public interface ISelect2 {
      * Remove selected option from single Select UI Element
      */
     void removeSelectedOption();
+
+    /**
+     * Remove selected option from Select2 UI element
+     *
+     * @param text - elected text option
+     */
+    void removeSelectedOption(String text);
 
     /**
      * Remove all selected options from multi Select UI Element
@@ -90,14 +103,24 @@ public interface ISelect2 {
     /**
      * Get selected option text from single Select
      *
+     * @param <T> The type parameter for the selected option text.
      * @return selected option text
      */
     <T> T getSelectedOptionText();
 
     /**
+     * Get all options text from single Select
+     *
+     * @param <T> The type parameter for the options text.
+     * @return A list of options text.
+     */
+    <T> List<T> getOptions();
+
+    /**
      * Get List of selected values text from multi Select
      *
-     * @return List of selected options text
+     * @param <T> The type parameter for the options text.
+     * @return A list selected options text.
      */
     <T> List<T> getMultiSelectedOptionsText();
 }

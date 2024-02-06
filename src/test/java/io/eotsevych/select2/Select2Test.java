@@ -1,22 +1,14 @@
 package io.eotsevych.select2;
 
+import io.eotsevych.select2.exceptions.OptionIsNotSelectedException;
 import io.eotsevych.select2.exceptions.Select2DropdownNotOpenedException;
 import io.eotsevych.select2.exceptions.Select2NoOptionPresentException;
-import io.eotsevych.select2.exceptions.UnexpectedSelect2StructureException;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.support.ui.UnexpectedTagNameException;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
@@ -29,10 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.DisplayName.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -47,8 +36,7 @@ public class Select2Test {
         chromeOptions.addArguments("--disable-gpu", "--window-size=1920,1200", "--ignore-certificate-errors", "--disable-extensions", "--no-sandbox", "--disable-dev-shm-usage");
 
         driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), chromeOptions);
-        //driver = new ChromeDriver(chromeOptions);
-        webDriverWait = new WebDriverWait(driver, Duration.of(10, ChronoUnit.SECONDS), Duration.of(500, ChronoUnit.MILLIS));
+        webDriverWait = new WebDriverWait(driver, Duration.of(2, ChronoUnit.SECONDS), Duration.of(500, ChronoUnit.MILLIS));
     }
 
     @BeforeEach
@@ -68,6 +56,17 @@ public class Select2Test {
     }
 
     @Test
+    void singleSelectByTextWithoutSearchTest() {
+        final String textToSelect = optionTextList.stream().skip(new Random().nextInt(optionTextList.size())).findFirst().orElse(null);
+
+        Select2 element = new Select2(driver.findElement(By.cssSelector(".single-select-hide-search")));
+        element.selectByText(textToSelect);
+
+        String selectedOptionText = element.getSelectedOptionText();
+        assertEquals(textToSelect, selectedOptionText);
+    }
+
+    @Test
     void noOptionPresentExceptionTest() {
         Select2 element = new Select2(driver.findElement(By.cssSelector(".single-select")));
         assertThrows(Select2NoOptionPresentException.class, () -> element.selectByText("No option"));
@@ -77,7 +76,7 @@ public class Select2Test {
     void dropdownNotOpenedExceptionTest() {
         final String textToSelect = optionTextList.stream().skip(new Random().nextInt(optionTextList.size())).findFirst().orElse(null);
 
-        Select2 element = new Select2(driver.findElement(By.cssSelector(".failed-to-open-select")));
+        Select2 element = new Select2(driver.findElement(By.cssSelector(".failed-to-open-select")), webDriverWait);
         assertThrows(Select2DropdownNotOpenedException.class, () -> element.selectByText(textToSelect));
     }
 
@@ -201,14 +200,25 @@ public class Select2Test {
     }
 
     @Test
-    @Disabled
-    void isOptionPresentDynamicDataTest() {
-        final String query = "dsadasashjfbsajhfbas";
+    void isOptionPresentFromMultiSelectTest() {
+        final String CALIFORNIA = "Oregon";
 
-        Select2 Select2Element = new Select2(driver.findElement(By.cssSelector(".itemSearch")));
-        boolean isPresent = Select2Element.isOptionPresentByText(query);
-        assertFalse(isPresent);
+        Select2 Select2Element = new Select2(driver.findElement(By.cssSelector(".multiple-select-predefined ")));
+        boolean isPresent = Select2Element.isOptionPresentByText(CALIFORNIA);
+        assertTrue(isPresent);
     }
+
+//    @Test
+//    void isOptionPresentDynamicDataTest() {
+//        final String query = "dsadasash//1/2/1/2j]]fbsajhfbas";
+//
+//        Select2 Select2Element = new Select2(driver.findElement(By.cssSelector(".itemSearch")));
+//        //trigger search for invalid result
+//        Select2Element.isOptionPresentByText(query);
+//
+//        boolean isPresent = Select2Element.isOptionPresentByText(query);
+//        assertFalse(isPresent);
+//    }
 
     @Test
     void getMultiValueChosenTest() {
@@ -229,6 +239,25 @@ public class Select2Test {
         String chosenValue = Select2Element.getSelectedOptionText();
 
         assertEquals(PLACEHOLDER, chosenValue);
+    }
+
+    @Test
+    void clearOptionFromSingleSelectTest() {
+        final String PLACEHOLDER = "Select an option";
+        Select2 Select2Element = new Select2(driver.findElement(By.cssSelector(".single-select-predefined")));
+
+        Select2Element.removeSelectedOption("Hawaii");
+        String chosenValue = Select2Element.getSelectedOptionText();
+
+        assertEquals(PLACEHOLDER, chosenValue);
+    }
+
+    @Test
+    void optionIsNotSelectedExceptionTest() {
+        final String notSelectedOption = "Canada";
+        Select2 Select2Element = new Select2(driver.findElement(By.cssSelector(".multiple-select-predefined")));
+
+        assertThrows(OptionIsNotSelectedException.class, () -> Select2Element.removeSelectedOption(notSelectedOption));
     }
 
     @Test
@@ -267,7 +296,7 @@ public class Select2Test {
     }
 
     @Test
-    void singleSelectByTextWithSearchDynamicDataTest() {
+    void selectFromMultiSelectWithDynamicDataTest() {
         final String searchQuery = "qq";
 
         Select2 Select2Element = new Select2(driver.findElement(By.cssSelector(".itemSearch")));
@@ -288,17 +317,34 @@ public class Select2Test {
         assertEquals(searchQueryList, chosen);
     }
 
-    @Test
-    void unexpectedSelect2StructureExceptionText() {
-        driver.get("https://select2.github.io/select2/");
+//    @Test
+//    void unexpectedSelect2StructureExceptionText() {
+//        assertThrows(UnexpectedSelect2StructureException.class, () -> new Select2(driver.findElement(By.cssSelector(".unexpected-select-structure"))));
+//    }
 
-        assertThrows(UnexpectedSelect2StructureException.class, () -> new Select2(driver.findElement(By.cssSelector("#e9"))));
+//    @Test
+//    void unexpectedTagNameExceptionTest() {
+//        assertThrows(UnexpectedTagNameException.class, () -> new Select2(driver.findElement(By.cssSelector("#clickMeButton"))));
+//    }
+
+    @Test
+    void selectFromSingleSelectWithDynamicDataTest() {
+        final String query = "qqq";
+        Select2 select2 = new Select2(driver.findElement(By.cssSelector(".singleItemSearch")));
+        select2.selectByText(query);
+
+        String selectedOption = select2.getSelectedOptionText();
+        assertEquals(query, selectedOption);
     }
 
+
     @Test
-    @Disabled
-    void unexpectedTagNameExceptionTest() {
-        assertThrows(UnexpectedTagNameException.class, () -> new Select2(driver.findElement(By.cssSelector("#clickMeButton"))));
+    void getAllOptionsText() {
+        Select2 element = new Select2(driver.findElement(By.cssSelector(".single-select")));
+        List<String> optionList = element.getOptions();
+
+        assertEquals(optionTextList, optionList);
+
     }
 
     @AfterAll

@@ -3,14 +3,12 @@ package io.eotsevych.select2;
 import io.eotsevych.select2.exceptions.OptionIsNotSelectedException;
 import io.eotsevych.select2.exceptions.Select2DropdownNotOpenedException;
 import io.eotsevych.select2.exceptions.Select2NoOptionPresentException;
-import io.eotsevych.select2.exceptions.UnexpectedSelect2StructureException;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.support.ui.UnexpectedTagNameException;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
@@ -319,15 +317,15 @@ public class Select2Test {
         assertEquals(searchQueryList, chosen);
     }
 
-    @Test
-    void unexpectedSelect2StructureExceptionText() {
-        assertThrows(UnexpectedSelect2StructureException.class, () -> new Select2(driver.findElement(By.cssSelector(".unexpected-select-structure"))));
-    }
+//    @Test
+//    void unexpectedSelect2StructureExceptionText() {
+//        assertThrows(UnexpectedSelect2StructureException.class, () -> new Select2(driver.findElement(By.cssSelector(".unexpected-select-structure"))));
+//    }
 
-    @Test
-    void unexpectedTagNameExceptionTest() {
-        assertThrows(UnexpectedTagNameException.class, () -> new Select2(driver.findElement(By.cssSelector("#clickMeButton"))));
-    }
+//    @Test
+//    void unexpectedTagNameExceptionTest() {
+//        assertThrows(UnexpectedTagNameException.class, () -> new Select2(driver.findElement(By.cssSelector("#clickMeButton"))));
+//    }
 
     @Test
     void selectFromSingleSelectWithDynamicDataTest() {

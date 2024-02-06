@@ -173,7 +173,9 @@ public class Select2 implements ISelect2 {
 
     @Override
     public boolean isOptionPresentByText(String query, boolean... isOpened) {
-        boolean isDynamicData, result;
+        boolean isDynamicData;
+        boolean result;
+
         if (!(isOpened.length > 0 && isOpened[0])) {
             expandContainerElement();
         }

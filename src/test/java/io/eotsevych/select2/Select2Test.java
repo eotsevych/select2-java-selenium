@@ -4,24 +4,18 @@ import io.eotsevych.select2.exceptions.OptionIsNotSelectedException;
 import io.eotsevych.select2.exceptions.Select2DropdownNotOpenedException;
 import io.eotsevych.select2.exceptions.Select2NoOptionPresentException;
 import io.eotsevych.select2.exceptions.UnexpectedSelect2StructureException;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.UnexpectedTagNameException;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
@@ -29,10 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.DisplayName.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -44,10 +35,9 @@ public class Select2Test {
     @BeforeAll
     void setup() throws MalformedURLException {
         ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--disable-gpu", "--window-size=1920,1200", "--ignore-certificate-errors", "--disable-extensions", "--no-sandbox", "--disable-dev-shm-usage", "--headless=new");
+        chromeOptions.addArguments("--disable-gpu", "--window-size=1920,1200", "--ignore-certificate-errors", "--disable-extensions", "--no-sandbox", "--disable-dev-shm-usage");
 
-        //driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), chromeOptions);
-        driver = new ChromeDriver(chromeOptions);
+        driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), chromeOptions);
         webDriverWait = new WebDriverWait(driver, Duration.of(2, ChronoUnit.SECONDS), Duration.of(500, ChronoUnit.MILLIS));
     }
 
@@ -61,6 +51,17 @@ public class Select2Test {
         final String textToSelect = optionTextList.stream().skip(new Random().nextInt(optionTextList.size())).findFirst().orElse(null);
 
         Select2 element = new Select2(driver.findElement(By.cssSelector(".single-select")));
+        element.selectByText(textToSelect);
+
+        String selectedOptionText = element.getSelectedOptionText();
+        assertEquals(textToSelect, selectedOptionText);
+    }
+
+    @Test
+    void singleSelectByTextWithoutSearchTest() {
+        final String textToSelect = optionTextList.stream().skip(new Random().nextInt(optionTextList.size())).findFirst().orElse(null);
+
+        Select2 element = new Select2(driver.findElement(By.cssSelector(".single-select-hide-search")));
         element.selectByText(textToSelect);
 
         String selectedOptionText = element.getSelectedOptionText();
@@ -210,11 +211,13 @@ public class Select2Test {
     }
 
 //    @Test
-//    @Disabled
 //    void isOptionPresentDynamicDataTest() {
-//        final String query = "dsadasashjfbsajhfbas";
+//        final String query = "dsadasash//1/2/1/2j]]fbsajhfbas";
 //
 //        Select2 Select2Element = new Select2(driver.findElement(By.cssSelector(".itemSearch")));
+//        //trigger search for invalid result
+//        Select2Element.isOptionPresentByText(query);
+//
 //        boolean isPresent = Select2Element.isOptionPresentByText(query);
 //        assertFalse(isPresent);
 //    }
@@ -321,16 +324,15 @@ public class Select2Test {
         assertThrows(UnexpectedSelect2StructureException.class, () -> new Select2(driver.findElement(By.cssSelector(".unexpected-select-structure"))));
     }
 
-//    @Test
-//    @Disabled
-//    void unexpectedTagNameExceptionTest() {
-//        assertThrows(UnexpectedTagNameException.class, () -> new Select2(driver.findElement(By.cssSelector("#clickMeButton"))));
-//    }
+    @Test
+    void unexpectedTagNameExceptionTest() {
+        assertThrows(UnexpectedTagNameException.class, () -> new Select2(driver.findElement(By.cssSelector("#clickMeButton"))));
+    }
 
     @Test
-    void selectFromSingleSelectWithDynamicDataTest(){
+    void selectFromSingleSelectWithDynamicDataTest() {
         final String query = "qqq";
-        Select2 select2  = new Select2(driver.findElement(By.cssSelector(".singleItemSearch")));
+        Select2 select2 = new Select2(driver.findElement(By.cssSelector(".singleItemSearch")));
         select2.selectByText(query);
 
         String selectedOption = select2.getSelectedOptionText();
@@ -339,7 +341,7 @@ public class Select2Test {
 
 
     @Test
-    void getAllOptionsText(){
+    void getAllOptionsText() {
         Select2 element = new Select2(driver.findElement(By.cssSelector(".single-select")));
         List<String> optionList = element.getOptions();
 
